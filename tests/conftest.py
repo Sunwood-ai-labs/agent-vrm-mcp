@@ -3,22 +3,22 @@ import pytest
 import tempfile
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from agent_vrm_mcp.server import ChatVRMServer
+from agent_vrm_mcp.server import AgentVRMServer
 
-# モックChatVRMサーバーのレスポンス
-MOCK_CHATVRM_RESPONSE = MagicMock()
-MOCK_CHATVRM_RESPONSE.raise_for_status = MagicMock()
-MOCK_CHATVRM_RESPONSE.json = MagicMock(return_value={
+# モックAgentVRMサーバーのレスポンス
+MOCK_AgentVRM_RESPONSE = MagicMock()
+MOCK_AgentVRM_RESPONSE.raise_for_status = MagicMock()
+MOCK_AgentVRM_RESPONSE.json = MagicMock(return_value={
     "audio": "data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ4AAAAC"
 })
 
 
 @pytest.fixture
 def mock_requests():
-    """ChatVRM APIリクエストをモック化するフィクスチャ"""
+    """AgentVRM APIリクエストをモック化するフィクスチャ"""
     with patch("requests.get") as mock_get, patch("requests.post") as mock_post:
-        # POSTリクエストのモック (ChatVRMはPOSTのみ)
-        mock_post.return_value = MOCK_CHATVRM_RESPONSE
+        # POSTリクエストのモック (AgentVRMはPOSTのみ)
+        mock_post.return_value = MOCK_AgentVRM_RESPONSE
         
         yield mock_get, mock_post
 
@@ -55,9 +55,9 @@ def temp_output_dir():
 
 
 @pytest.fixture
-def chatvrm_server(mock_requests, temp_output_dir):
-    """テスト用のChatVRMServerインスタンスを提供するフィクスチャ"""
-    server = ChatVRMServer("http://localhost:3001/api/speak_text", output_dir=temp_output_dir)
+def AgentVRM_server(mock_requests, temp_output_dir):
+    """テスト用のAgentVRMServerインスタンスを提供するフィクスチャ"""
+    server = AgentVRMServer("http://localhost:3001/api/speak_text", output_dir=temp_output_dir)
     return server
 
 
