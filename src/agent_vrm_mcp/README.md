@@ -1,6 +1,6 @@
-# 🤖 src/mcp_server_vrm
+# 🤖 src/agent_vrm_mcp
 
-このディレクトリには、ChatVRM APIを利用したMCPサーバー「mcp-server-vrm」の主要なソースコードが含まれています。
+このディレクトリには、ChatVRM APIを利用したMCPサーバー「agent-vrm-mcp」の主要なソースコードが含まれています。
 
 ---
 
@@ -14,7 +14,7 @@ MCPツールとして `speak_text` を提供し、テキストを音声ファイ
 ## 📦 ファイル構成
 
 - `__init__.py`: パッケージ初期化・CLIエントリーポイント（`main`関数）を定義
-- `__main__.py`: `python -m mcp_server_vrm` で直接実行可能にするエントリーポイント
+- `__main__.py`: `python -m agent_vrm_mcp` で直接実行可能にするエントリーポイント
 - `server.py`: MCPサーバー本体・ChatVRM API連携・ツール定義
 
 ---
@@ -28,7 +28,7 @@ MCPツールとして `speak_text` を提供し、テキストを音声ファイ
 ### 2. MCPサーバーの起動
 
 ```bash
-uvx mcp-server-vrm --api-url=http://localhost:3001/api/speak_text
+uvx agent-vrm-mcp --api-url=http://localhost:3001/api/speak_text
 ```
 
 - `--api-url`: ChatVRMのAPIエンドポイントURL（省略時は `http://localhost:3001/api/speak_text`）
@@ -60,7 +60,7 @@ ChatVRM APIでテキストを音声合成し、ファイル保存・自動再生
 
 ## 📁 プロジェクト構造
 
-- `src/mcp_server_vrm`: 本サーバーのソースコード
+- `src/agent_vrm_mcp`: 本サーバーのソースコード
 - `assets/`: 音声ファイルの出力先（自動生成）
 
 ---
