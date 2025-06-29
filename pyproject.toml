@@ -1,13 +1,13 @@
 [project]
-name = "mcp-server-voicevox"
-version = "0.2.0"
-description = "A Model Context Protocol server providing VoiceVox text-to-speech functionality for LLMs"
+name = "agent-vrm-mcp"
+version = "0.1.0"
+description = "A Model Context Protocol server providing VRM avatar functionality for LLMs"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
-    { name = "VoiceVox MCP Developer", email = "example@example.com" },
+    { name = "VRM MCP Developer", email = "example@example.com" },
 ]
-keywords = ["voicevox", "tts", "text-to-speech", "mcp", "llm"]
+keywords = ["vrm", "avatar", "3d", "mcp", "llm"]
 license = { text = "MIT" }
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -20,14 +20,15 @@ dependencies = [
     "mcp>=1.0.0",
     "pydantic>=2.0.0",
     "requests>=2.31.0",
+    "loguru>=0.7.0",
 ]
 
 [project.scripts]
-mcp-server-voicevox = "mcp_server_voicevox:main"
+agent-vrm-mcp = "agent_vrm_mcp:main"
 
 [project.urls]
-Repository = "https://github.com/Sunwood-ai-labs/mcp-voicevox"
-PyPI = "https://pypi.org/project/mcp-server-voicevox/"
+Repository = "https://github.com/Sunwood-ai-labs/agent-vrm-mcp"
+PyPI = "https://pypi.org/project/agent-vrm-mcp/"
 
 [build-system]
 requires = ["hatchling"]
@@ -47,3 +48,4 @@ python_files = "test_*.py"
 python_classes = "Test*"
 python_functions = "test_*"
 asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
