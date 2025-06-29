@@ -14,7 +14,7 @@ from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import EmbeddedResource, ImageContent, TextContent, Tool
 
-class ChatVRMServer:
+class AgentVRMServer:
     def __init__(self, api_url: str, output_dir: Optional[str] = None):
         self.api_url = api_url.rstrip("/")
         # 出力ディレクトリ
@@ -65,8 +65,8 @@ class ChatVRMServer:
             duration = frames / float(rate)
         logger.info(f"音声の長さ: {duration:.2f}秒")
 
-        # ChatVRMサーバー側で再生されるため、音声の長さ分待機
-        logger.info(f"ChatVRM再生のため{duration:.2f}秒待機中...")
+        # AgentVRMサーバー側で再生されるため、音声の長さ分待機
+        logger.info(f"AgentVRM再生のため{duration:.2f}秒待機中...")
         time.sleep(duration)
         logger.info("待機完了")
 
@@ -75,14 +75,14 @@ class ChatVRMServer:
 
 async def serve(api_url: str = "http://localhost:3001/api/speak_text", output_dir: Optional[str] = None) -> None:
     server = Server("mcp-vrm")
-    vrm_server = ChatVRMServer(api_url, output_dir)
+    vrm_server = AgentVRMServer(api_url, output_dir)
 
     @server.list_tools()
     async def list_tools() -> list[Tool]:
         return [
             Tool(
                 name="speak_text",
-                description="ChatVRM APIでテキストを音声合成しファイル保存する",
+                description="AgentVRM APIでテキストを音声合成しファイル保存する",
                 inputSchema={
                     "type": "object",
                     "properties": {
@@ -129,8 +129,8 @@ async def serve(api_url: str = "http://localhost:3001/api/speak_text", output_di
             else:
                 raise ValueError(f"Unknown tool: {name}")
         except Exception as e:
-            logger.error(f"Error processing ChatVRM request: {e}")
-            raise ValueError(f"Error processing ChatVRM request: {str(e)}")
+            logger.error(f"Error processing AgentVRM request: {e}")
+            raise ValueError(f"Error processing AgentVRM request: {str(e)}")
 
     options = server.create_initialization_options()
     async with stdio_server() as (read_stream, write_stream):

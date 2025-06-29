@@ -1,3 +1,3 @@
-from mcp_server_vrm import main
+from agent_vrm_mcp import main
 
 main()

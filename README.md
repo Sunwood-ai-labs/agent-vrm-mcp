@@ -1,6 +1,6 @@
 <div align="center">
 
-![Image](https://github.com/user-attachments/assets/702f7c91-1a23-41f0-8b7a-3ea4ce43ce2c)
+![Image](https://github.com/user-attachments/assets/a88c69ce-c034-47c3-8d05-26c348aa063e)
 
 # 🤖 Agent VRM MCP サーバー
 
@@ -21,21 +21,25 @@
 
 </div>
 
-ChatVRM を介してVRMアバター機能を提供する Model Context Protocol サーバーです。このサーバーにより、Claude は ChatVRM エンジンが提供するVRMアバターを使用してテキストから音声を生成し、3Dアバターとして表現することができます。
+AgentVRM を介してVRMアバター機能を提供する Model Context Protocol サーバーです。このサーバーにより、Claude は AgentVRM エンジンが提供するVRMアバターを使用してテキストから音声を生成し、3Dアバターとして表現することができます。
 
 ---
 
 
+## 🎥 デモ動画
+
+https://github.com/user-attachments/assets/ea4b736d-a326-45b0-be88-b01fff6dc3f3
+
 ## ✨ 機能
 
-- **テキスト読み上げ**: 指定したテキストを ChatVRM のVRMアバターで読み上げます。
+- **テキスト読み上げ**: 指定したテキストを AgentVRM のVRMアバターで読み上げます。
 - **VRMアバター表示**: 3DのVRMアバターがテキストを読み上げ、表情やアニメーションも表現します。
 - **音声の自動再生**: 生成した音声をその場で自動的に再生します。
 - **音声ファイル保存**: 生成した音声は `assets` フォルダに `.wav` ファイルとして保存されます。
 
 ## 🚀 前提条件
 
-- ChatVRM エンジンが動作していること（ローカルまたはリモートで）
+- AgentVRM エンジンが動作していること（ローカルまたはリモートで）
 - Python 3.10 以上
 
 ## 📦 インストール
@@ -46,12 +50,12 @@ ChatVRM を介してVRMアバター機能を提供する Model Context Protocol 
 
 ## ⚙️ 設定
 
-### ChatVRM エンジン
+### AgentVRM エンジン
 
-このサーバーは動作するために ChatVRM エンジンが必要です。エンジンの起動は手動で行う必要があります。
+このサーバーは動作するために AgentVRM エンジンが必要です。エンジンの起動は手動で行う必要があります。
 デフォルトでは `http://localhost:3001/api/speak_text` への接続を試みます。`--api-url` 引数で別の URL を指定することができます。
 
-ChatVRM エンジンは [公式 ChatVRM リポジトリ](https://github.com/pixiv/ChatVRM) からダウンロードしてインストールできます。
+AgentVRM エンジンは [公式 AgentVRM リポジトリ](https://github.com/pixiv/AgentVRM) からダウンロードしてインストールできます。
 
 ### Claude Desktop 用の設定
 
@@ -75,7 +79,7 @@ Claude Desktop の設定に追加：
 
 ## 🛠️ 利用可能なツール
 
-- `speak_text` - ChatVRM を使用してテキストを音声に変換し、VRMアバターで表現
+- `speak_text` - AgentVRM を使用してテキストを音声に変換し、VRMアバターで表現
   - 必須引数：
     - `text` (文字列): 音声に変換するテキスト
   - オプション引数：
@@ -94,6 +98,26 @@ Claude Desktop の設定に追加：
 
 - `src/agent_vrm_mcp`: [ソースコード](./src/agent_vrm_mcp/README.md)
 - `tests`: [テストコード](./tests/README.md)
+
+## 🧑‍💻 開発モードでのセットアップ・実行手順
+
+開発者向けに、`uv` を用いた開発モードでのインストールおよびMCP Inspectorによる実行手順をまとめます。
+
+```bash
+# プロジェクトディレクトリで開発モードでインストール
+cd C:\Prj\agent-vrm-mcp
+uv sync
+
+# 開発モードでパッケージをインストール
+uv pip install -e .
+
+# MCP Inspector で実行
+npx @modelcontextprotocol/inspector python -m agent_vrm_mcp --api-url=http://localhost:3001/api/speak_text
+```
+
+- `uv sync` で依存パッケージを同期します。
+- `uv pip install -e .` で開発モード（編集可能インストール）を行います。
+- MCP Inspectorを使うことで、`agent_vrm_mcp`サーバーをAPIエンドポイント指定で起動できます。
 
 ## 📄 ライセンス
 
