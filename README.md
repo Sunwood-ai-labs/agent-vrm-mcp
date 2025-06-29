@@ -1,6 +1,6 @@
 <div align="center">
 
-![Image](https://github.com/user-attachments/assets/702f7c91-1a23-41f0-8b7a-3ea4ce43ce2c)
+![Image](https://github.com/user-attachments/assets/a88c69ce-c034-47c3-8d05-26c348aa063e)
 
 # 🤖 Agent VRM MCP サーバー
 
@@ -25,6 +25,10 @@ AgentVRM を介してVRMアバター機能を提供する Model Context Protocol
 
 ---
 
+
+## 🎥 デモ動画
+
+https://github.com/user-attachments/assets/ea4b736d-a326-45b0-be88-b01fff6dc3f3
 
 ## ✨ 機能
 
