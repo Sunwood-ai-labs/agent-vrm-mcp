@@ -24,6 +24,7 @@ dependencies = [
 
 [project.scripts]
 mcp-server-voicevox = "mcp_server_voicevox:main"
+mcp-server-vrm = "mcp_server_vrm:main"
 
 [project.urls]
 Repository = "https://github.com/Sunwood-ai-labs/mcp-voicevox"
