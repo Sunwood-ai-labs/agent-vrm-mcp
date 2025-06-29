@@ -2,20 +2,17 @@ import asyncio
 import base64
 import datetime
 import json
-import logging
 import os
-import platform
 import re
 import requests
-import subprocess
+import time
 import wave
 from typing import Any, Dict, List, Optional, Sequence, Union
 
+from loguru import logger
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import EmbeddedResource, ImageContent, TextContent, Tool
-
-logger = logging.getLogger(__name__)
 
 class ChatVRMServer:
     def __init__(self, api_url: str, output_dir: Optional[str] = None):
@@ -31,7 +28,6 @@ class ChatVRMServer:
         text: str,
         speaker_id: int = 1,
         speed_scale: float = 1.0,
-        auto_play: bool = True,
     ) -> str:
         payload = {
             "text": text,
@@ -69,51 +65,13 @@ class ChatVRMServer:
             duration = frames / float(rate)
         logger.info(f"音声の長さ: {duration:.2f}秒")
 
-        if auto_play:
-            self.play_audio(output_path)
+        # ChatVRMサーバー側で再生されるため、音声の長さ分待機
+        logger.info(f"ChatVRM再生のため{duration:.2f}秒待機中...")
+        time.sleep(duration)
+        logger.info("待機完了")
 
         return output_path
 
-    def play_audio(self, filepath: str) -> None:
-        try:
-            system = platform.system().lower()
-            if system == "windows":
-                try:
-                    subprocess.run([
-                        "powershell", "-c",
-                        f"(New-Object Media.SoundPlayer '{filepath}').PlaySync()"
-                    ], check=True, capture_output=True)
-                    logger.info(f"Audio played using PowerShell: {filepath}")
-                    return
-                except Exception:
-                    pass
-                try:
-                    subprocess.run([
-                        "start", "/min", "wmplayer", "/close", filepath
-                    ], shell=True, check=True)
-                    logger.info(f"Audio played using Windows Media Player: {filepath}")
-                    return
-                except Exception:
-                    pass
-                os.startfile(filepath)
-                logger.info(f"Audio opened with default application: {filepath}")
-            elif system == "darwin":
-                subprocess.run(["afplay", filepath], check=True)
-                logger.info(f"Audio played using afplay: {filepath}")
-            else:
-                try:
-                    subprocess.run(["aplay", "-q", filepath], check=True)
-                    logger.info(f"Audio played using aplay: {filepath}")
-                except Exception:
-                    try:
-                        subprocess.run(["paplay", filepath], check=True)
-                        logger.info(f"Audio played using paplay: {filepath}")
-                    except Exception:
-                        subprocess.run(["xdg-open", filepath], check=True)
-                        logger.info(f"Audio opened with default application: {filepath}")
-        except Exception as e:
-            logger.error(f"Failed to play audio: {e}")
-            logger.info(f"Audio file saved to: {filepath}")
 
 async def serve(api_url: str = "http://localhost:3001/api/speak_text", output_dir: Optional[str] = None) -> None:
     server = Server("mcp-vrm")
@@ -124,7 +82,7 @@ async def serve(api_url: str = "http://localhost:3001/api/speak_text", output_di
         return [
             Tool(
                 name="speak_text",
-                description="ChatVRM APIでテキストを音声合成しファイル保存・再生する",
+                description="ChatVRM APIでテキストを音声合成しファイル保存する",
                 inputSchema={
                     "type": "object",
                     "properties": {
@@ -142,11 +100,6 @@ async def serve(api_url: str = "http://localhost:3001/api/speak_text", output_di
                             "description": "再生速度 (デフォルト: 1.0)",
                             "default": 1.0
                         },
-                        "auto_play": {
-                            "type": "boolean",
-                            "description": "自動再生するか (デフォルト: True)",
-                            "default": True
-                        }
                     },
                     "required": ["text"],
                 },
@@ -164,14 +117,13 @@ async def serve(api_url: str = "http://localhost:3001/api/speak_text", output_di
                     raise ValueError("textは必須です")
                 speaker_id = arguments.get("speaker_id", 1)
                 speed_scale = arguments.get("speed_scale", 1.0)
-                auto_play = arguments.get("auto_play", True)
                 filepath = vrm_server.speak_text(
-                    text, speaker_id, speed_scale, auto_play
+                    text, speaker_id, speed_scale
                 )
                 return [
                     TextContent(
                         type="text",
-                        text=f"音声を生成し{'再生しました' if auto_play else '保存しました'}。\n保存先: {filepath}"
+                        text=f"音声を生成し保存しました。\n保存先: {filepath}"
                     )
                 ]
             else:
