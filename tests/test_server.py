@@ -5,12 +5,12 @@ from unittest.mock import MagicMock, patch
 import pytest
 import requests
 
-from agent_vrm_mcp.server import ChatVRMServer
+from agent_vrm_mcp.server import AgentVRMServer
 
 def test_init_success(mock_os_operations):
-    """ChatVRMServerの初期化が正常に行われるかテスト"""
+    """AgentVRMServerの初期化が正常に行われるかテスト"""
     mock_makedirs, _ = mock_os_operations
-    server = ChatVRMServer("http://localhost:3001/api/speak_text")
+    server = AgentVRMServer("http://localhost:3001/api/speak_text")
     
     # os.makedirsが呼ばれたかを確認
     mock_makedirs.assert_called_once()
@@ -20,15 +20,15 @@ def test_init_success(mock_os_operations):
 
 
 def test_init_connection_error(mock_os_operations):
-    """ChatVRM APIに接続できない場合のエラーハンドリングをテスト"""
+    """AgentVRM APIに接続できない場合のエラーハンドリングをテスト"""
     # サーバーが正常に初期化されることを確認
-    server = ChatVRMServer("http://nonexistent:3001/api/speak_text")
+    server = AgentVRMServer("http://nonexistent:3001/api/speak_text")
     assert server.api_url == "http://nonexistent:3001/api/speak_text"
 
 
-def test_speak_text_basic(chatvrm_server, mock_requests, mock_file_operations, mock_os_operations):
+def test_speak_text_basic(AgentVRM_server, mock_requests, mock_file_operations, mock_os_operations):
     """speak_textメソッドの基本機能をテスト"""
-    filepath = chatvrm_server.speak_text("こんにちは")
+    filepath = AgentVRM_server.speak_text("こんにちは")
     
     # APIリクエストが正しいパラメータで呼ばれたか確認
     _, mock_post = mock_requests
@@ -39,9 +39,9 @@ def test_speak_text_basic(chatvrm_server, mock_requests, mock_file_operations, m
     mock_file.__enter__.return_value.write.assert_called_once()
 
 
-def test_speak_text_with_params(chatvrm_server, mock_requests, mock_file_operations):
+def test_speak_text_with_params(AgentVRM_server, mock_requests, mock_file_operations):
     """speak_textメソッドのパラメータ指定をテスト"""
-    filepath = chatvrm_server.speak_text(
+    filepath = AgentVRM_server.speak_text(
         "こんにちは", 
         speaker_id=2, 
         speed_scale=1.2
@@ -57,11 +57,11 @@ def test_speak_text_with_params(chatvrm_server, mock_requests, mock_file_operati
 
 
 
-def test_speak_text_error_handling(chatvrm_server, mock_requests):
+def test_speak_text_error_handling(AgentVRM_server, mock_requests):
     """speak_textメソッドのエラーハンドリングをテスト"""
     # APIリクエストが失敗する場合
     _, mock_post = mock_requests
     mock_post.side_effect = requests.RequestException("API Error")
     
     with pytest.raises(requests.RequestException):
-        chatvrm_server.speak_text("テストテキスト")
+        AgentVRM_server.speak_text("テストテキスト")
