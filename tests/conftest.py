@@ -9,7 +9,7 @@ from agent_vrm_mcp.server import ChatVRMServer
 MOCK_CHATVRM_RESPONSE = MagicMock()
 MOCK_CHATVRM_RESPONSE.raise_for_status = MagicMock()
 MOCK_CHATVRM_RESPONSE.json = MagicMock(return_value={
-    "audio": "data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ4AAAC"
+    "audio": "data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ4AAAAC"
 })
 
 
@@ -27,16 +27,10 @@ def mock_requests():
 def mock_os_operations():
     """ファイルシステム操作をモック化するフィクスチャ"""
     with patch("os.makedirs") as mock_makedirs, \
-         patch("os.path.join", return_value="/mock/path/file.wav") as mock_join, \
-         patch("os.startfile") as mock_startfile:
-        yield mock_makedirs, mock_join, mock_startfile
+         patch("os.path.join", return_value="/mock/path/file.wav") as mock_join:
+        yield mock_makedirs, mock_join
 
 
-@pytest.fixture
-def mock_subprocess():
-    """サブプロセス操作をモック化するフィクスチャ"""
-    with patch("subprocess.run") as mock_run:
-        yield mock_run
 
 
 @pytest.fixture
