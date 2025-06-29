@@ -55,7 +55,7 @@ https://github.com/user-attachments/assets/ea4b736d-a326-45b0-be88-b01fff6dc3f3
 このサーバーは動作するために AgentVRM エンジンが必要です。エンジンの起動は手動で行う必要があります。
 デフォルトでは `http://localhost:3001/api/speak_text` への接続を試みます。`--api-url` 引数で別の URL を指定することができます。
 
-AgentVRM エンジンは [公式 AgentVRM リポジトリ](https://github.com/pixiv/AgentVRM) からダウンロードしてインストールできます。
+AgentVRM エンジンは [公式 AgentVRM リポジトリ](https://github.com/Sunwood-ai-labs/AgentVRM) からダウンロードしてインストールできます。
 
 ### Claude Desktop 用の設定
 
